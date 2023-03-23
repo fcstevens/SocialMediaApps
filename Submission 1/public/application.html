@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Social Media App</title>
+</head>
+<body>
+    <h2>Welcome to the Social Media Pet App</h2>
+    <h3>This app allows you to see, share, post and comment all animial-related content!</h3>
+    <nav>
+        <a href="login.html">Login</a>
+        <a href="logout.html">Logout</a>
+        <a href="register.html">Register</a> 
+        <a href="app">Post-a-pet</a>
+        <a href="feed.html">Feed</a>
+        <a href="message.html">Message</a>
+    </nav>
+    <form action="/action_page.php">
+        <label for="img">Select an image to upload:</label>
+        <input type="file" id="img" name="img" accept="image/*">
+        <input type="submit">
+      </form>
+
+    <form action="/newpost" method="POST">
+        <label>Message:</label>
+        <input type="text" id="message" name="message"><br>
+        <input type="submit" value="Post"> 
+    </form>
+</body>
+</html>
