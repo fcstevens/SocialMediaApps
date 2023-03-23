@@ -1,0 +1,35 @@
+
+DATA PLAN
+
+account overview beers document:
+
+{ 	"userId": "user3819",
+	"firstName": "Karl",
+	"secondName": "Franz",
+	"email": "Karlfranz@middenland.org.ac",
+	"Posts": {
+		    "Post Title": "Dogz rule Catz Drule",
+		    "Post URL: "https://www.amazon.co.uk/Dogs-Rule-CD-Daniel-Kirk/dp/0786819499",
+		    "Post Time: "120442169",
+		    "Likes": "3" {
+				    "userId": ["user2349","user2304","user"3047"]
+				  }  
+		    "Comments": 1 {
+				    "userId": "user2304",
+				    "commentText": "You said it!",
+				  }
+		 }
+}
+
+database schema for message
+
+User:							Message					Contact							 Subject		
+"userId": "user3819",				"userId": "user3819",			"userId": "user0983",				"msgText": "Look at this one!"
+"firstName": "Karl",			--->	"msgTime": "12202716",    ----->	"email": "bigcatlover@gmail.com",	---->	"img": "https://placekitten.com/200/300",
+"secondName": "Franz",				"likeBool": False,			"firstName": "Snow",				"likeBool": True,
+"email": "Karlfranz@middenland.org.ac",	 		   ^		 	        "secondName": "Ball II",  		             |
+							   |										     |
+							    ---------------------------------------------------------------------------------
+
+
+
