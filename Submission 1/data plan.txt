@@ -7,12 +7,12 @@ account overview beers document:
 	"firstName": "Karl",
 	"secondName": "Franz",
 	"email": "Karlfranz@middenland.org.ac",
-	"Posts": {
+	"Posts": "1",{
 		    "Post Title": "Dogz rule Catz Drule",
 		    "Post URL: "https://www.amazon.co.uk/Dogs-Rule-CD-Daniel-Kirk/dp/0786819499",
 		    "Post Time: "120442169",
 		    "Likes": "3" {
-				    "userId": ["user2349","user2304","user"3047"]
+				    "userId": ["user2349","user2304","user3047"]
 				  }  
 		    "Comments": 1 {
 				    "userId": "user2304",
@@ -20,6 +20,35 @@ account overview beers document:
 				  }
 		 }
 }
+
+{ 	"userId": "user837",
+	"firstName": "Mike",
+	"secondName": "Esienhow",
+	"email": "hackerwhitehack.org.ac",
+	"Posts": "0"
+}
+
+
+{ 	"userId": "user0361",
+	"firstName": "Ciara",
+	"secondName": "Hays",
+	"email": "ciarahaybale@talktalk.net",
+	"Posts": "1"{
+		    "Post Title": "Cannot believe frogs are real",
+		    "Post URL: "https://www.istockphoto.com/photos/colorful-frog",
+		    "Post Time: "209273869",
+		    "Likes": "5" {
+				    "userId": ["user2349","user2304","user3047", "user837", "user2304"],
+				  }  
+		    "Comments": 2 {
+				    "userId": ["user3047", "user2304"],
+				    "commentText": ["Ribbet", "toads ftw"],
+				  }
+		 }
+}
+
+
+
 
 database schema for message
 
