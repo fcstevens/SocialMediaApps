@@ -41,7 +41,7 @@ function updateRecentPosts(){
         
         let li=document.createElement('li')
         let liText=document.createElement('p')
-        liText.textContent='${post.message} (by ${post.postedBy})'
+        liText.textContent=`${post.message} (by ${post.postedBy})`
         li.appendChild(liText)
         recentPosts.appendChild(li)
     })
