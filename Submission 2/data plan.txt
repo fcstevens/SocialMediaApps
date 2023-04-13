@@ -1,0 +1,64 @@
+
+DATA PLAN
+
+account overview beers document:
+
+{ 	"userId": "user3819",
+	"firstName": "Karl",
+	"secondName": "Franz",
+	"email": "Karlfranz@middenland.org.ac",
+	"Posts": "1",{
+		    "Post Title": "Dogz rule Catz Drule",
+		    "Post URL: "https://www.amazon.co.uk/Dogs-Rule-CD-Daniel-Kirk/dp/0786819499",
+		    "Post Time: "120442169",
+		    "Likes": "3" {
+				    "userId": ["user2349","user2304","user3047"]
+				  }  
+		    "Comments": 1 {
+				    "userId": "user2304",
+				    "commentText": "You said it!",
+				  }
+		 }
+}
+
+{ 	"userId": "user837",
+	"firstName": "Mike",
+	"secondName": "Esienhow",
+	"email": "hackerwhitehack.org.ac",
+	"Posts": "0"
+}
+
+
+{ 	"userId": "user0361",
+	"firstName": "Ciara",
+	"secondName": "Hays",
+	"email": "ciarahaybale@talktalk.net",
+	"Posts": "1"{
+		    "Post Title": "Cannot believe frogs are real",
+		    "Post URL: "https://www.istockphoto.com/photos/colorful-frog",
+		    "Post Time: "209273869",
+		    "Likes": "5" {
+				    "userId": ["user2349","user2304","user3047", "user837", "user2304"],
+				  }  
+		    "Comments": 2 {
+				    "userId": ["user3047", "user2304"],
+				    "commentText": ["Ribbet", "toads ftw"],
+				  }
+		 }
+}
+
+
+
+
+database schema for message
+
+User:							Message					Contact							 Subject		
+"userId": "user3819",				"userId": "user3819",			"userId": "user0983",				"msgText": "Look at this one!"
+"firstName": "Karl",			--->	"msgTime": "12202716",    ----->	"email": "bigcatlover@gmail.com",	---->	"img": "https://placekitten.com/200/300",
+"secondName": "Franz",				"likeBool": False,			"firstName": "Snow",				"likeBool": True,
+"email": "Karlfranz@middenland.org.ac",	 		   ^		 	        "secondName": "Ball II",  		             |
+							   |										     |
+							    ---------------------------------------------------------------------------------
+
+
+
