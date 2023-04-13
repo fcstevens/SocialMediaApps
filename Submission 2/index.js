@@ -11,7 +11,7 @@ require('dotenv').config();
 const mongoDBPassword=process.env.MYMONGOPASSWORD;
 
 const mongoose=require('mongoose'); 
-mongoose.connect(`mongodb+srv://CCO6005-01: ${mongoDBPassword}@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://CCO6005-01:${mongoDBPassword}@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`)
 
 
 //imports data models
