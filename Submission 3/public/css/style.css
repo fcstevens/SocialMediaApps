@@ -1,0 +1,189 @@
+
+
+body {
+    background-color: #c2c3f5;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+h1 {
+    color: #fff8e8;
+    font-size: 36px;
+    text-align: center; /* center the text horizontally */
+}
+
+h2 {
+    color: #fff8e8;
+    font-size: 24px;
+    text-align: center; /* center the text horizontally */
+}
+
+h3 {
+  color: #4056A1;
+  font-size: 15px;
+  text-align: center;
+}
+
+header {
+  background-color: #fff8e8;
+}
+
+.picPet {
+  color: #f9d476;
+}
+
+/*navigation css section*/
+nav {
+    background-color: #4056A1; 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 10px; 
+  }
+  
+  nav a {
+    color: #fff8e8; 
+    text-decoration: none; 
+    margin-right: 10px; 
+    font-size: 20px; 
+    font-weight: bold; 
+  }
+  
+  nav a:hover {
+    color: #edcfa1; 
+  }
+
+  /* form container css*/
+.form-box, .message-form {
+    max-width: 400px; 
+    margin: 0 auto; /* center the form container horizontally */
+    padding: 20px; 
+    border: 6px solid #4056A1; /* add a border to the form container */
+    border-radius: 5px; 
+    display: flex; /* use flexbox for layout */
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    background-color: #fff8e8;
+  }
+  
+  
+  .form-field {
+    margin-bottom: 10px; 
+  }
+  
+  .form-field label {
+    display: block; 
+    font-weight: bold; 
+    color: #4056A1;
+    margin-bottom: 5px; 
+  }
+  
+  .form-field input {
+    width: 100%; 
+    padding: 10px; 
+    padding-top: 10px;
+    border: 3px solid #baaaf7	; 
+    border-radius: 5px; 
+  }
+  
+  .submitButton {
+    background-color: #baaaf7; 
+    color: #fff; 
+    border: #efe2ba; 
+    border-radius: 4px; 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+  }
+  
+  .submitButton:hover {
+    background-color: #F13C20; 
+  }
+  
+
+  button {
+    background-color:#f9d476;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: bold
+  }
+  
+  button:hover {
+    background-color: #87e393;
+  }
+
+  .newPostButton {
+    background-color: #f9d476;
+  }
+
+  .newPostButton:hover {
+    background-color: #F13C20;
+  }
+  .centre {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 5vh;
+  }
+
+   .feed-container {
+    background-color: #fff8e8;
+    max-width: 70%;
+    margin: 0 auto;
+    height: 60%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#recent-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+  
+
+/*profile section*/
+.profile-picture {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.profile-info {
+  text-align: center;
+  margin-top: 20px;
+}
+
+
+.profile-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff8e8;
+}
+
+.profile-bio {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #e1bc5e;
+}
