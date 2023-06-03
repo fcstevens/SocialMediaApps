@@ -1,11 +1,11 @@
 require('dotenv').config();
 //const mongoDBPassword=process.env.MYMONGODBPASSWORD
-const sessionSecret=process.env.MYSESSIONSECRET
+const sessionSecret = process.env.MYSESSIONSECRET
 
 
-const express=require('express')
+const express = require('express')
 const app = express()
-app.listen(3000, ()=> console.log('listening at port 3000'))
+app.listen(3000, () => console.log('listening at port 3000'))
 
 
 //serve unspecified static pages from our public dir
@@ -14,12 +14,12 @@ app.use(express.static('public'))
 app.use(express.json())
 
 //allows us to process post info in urls
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 const path = require('path');
 
 //multer allows processing multipart forms with images
-const multer=require('multer');
+const multer = require('multer');
 
 const upload = multer({ dest: './public/uploads/' })
 
@@ -38,26 +38,26 @@ app.use(cookieParser());
 //load sessions middleware, with some config
 app.use(sessions({
     secret: sessionSecret,
-    saveUninitialized:true,
+    saveUninitialized: true,
     cookie: { maxAge: oneHour },
-    resave: false 
+    resave: false
 }));
 
 //load mongoose module and connect to MongoDB instance and database
 
-const mongoose=require('mongoose'); 
+const mongoose = require('mongoose');
 mongoose.connect(`mongodb+srv://CCO6005-01:black.D0g@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`)
 
 //importing our own node module
-const users=require('./models/User')
+const users = require('./models/User')
 
 //load our Post model
-const postData =require('./models/Post');
+const postData = require('./models/Post');
 
 //test that user is logged in with a valid session
-function checkLoggedIn(request, response, nextAction){
-    if(request.session){
-        if(request.session.userid){
+function checkLoggedIn(request, response, nextAction) {
+    if (request.session) {
+        if (request.session.userid) {
             nextAction()
         } else {
             request.session.destroy()
@@ -67,32 +67,32 @@ function checkLoggedIn(request, response, nextAction){
 }
 
 //controller for the main app view, depends on user logged in state
-app.get('/app', checkLoggedIn, (request, response)=>{
+app.get('/app', checkLoggedIn, (request, response) => {
     // response.redirect('./application.html')
     response.redirect('./viewposts.html')
 })
 
 
 //controller for logout
-app.post('/logout', async (request, response)=>{
-    
-    await users.setLoggedIn(request.session.userid,false)
+app.post('/logout', async (request, response) => {
+
+    await users.setLoggedIn(request.session.userid, false)
     request.session.destroy()
     await console.log(users.getUsers())
     response.redirect('./loggedout.html')
 })
 
 //controller for login
-app.post('/login', async (request, response)=>{
+app.post('/login', async (request, response) => {
     console.log(request.body)
-    let userData=request.body
+    let userData = request.body
     console.log(userData)
-    
-    if(await users.findUser(userData.username)){
+
+    if (await users.findUser(userData.username)) {
         console.log('user found')
-        if(await users.checkPassword(userData.username, userData.password)){
+        if (await users.checkPassword(userData.username, userData.password)) {
             console.log('password matches')
-            request.session.userid=userData.username
+            request.session.userid = userData.username
             await users.setLoggedIn(userData.username, true)
             response.redirect('/viewposts.html')
         } else {
@@ -106,11 +106,11 @@ app.post('/login', async (request, response)=>{
 })
 
 
-app.post('/newpost', upload.single('myImage'), async (request, response) =>{
+app.post('/newpost', upload.single('myImage'), async (request, response) => {
     // console.log(request.file)
-    let filename=null
-    if(request.file && request.file.filename){ //check that a file was passes with a valid name
-        filename='uploads/'+request.file.filename
+    let filename = null
+    if (request.file && request.file.filename) { //check that a file was passes with a valid name
+        filename = 'uploads/' + request.file.filename
     }
     await postData.addNewPost(request.session.userid, request.body, filename)
     response.redirect('/viewposts.html')
@@ -120,52 +120,52 @@ app.post('/newpost', upload.single('myImage'), async (request, response) =>{
 
 
 // async/await version of /getposts controller using Mongo
-app.get('/getposts',async (request, response)=>{
+app.get('/getposts', async (request, response) => {
     response.json(
-        {posts:await postData.getPosts(5)}
+        { posts: await postData.getPosts(5) }
     )
 })
 
 
 //controller for handling a post being liked
-app.post('/like', async (request, response)=>{
+app.post('/like', async (request, response) => {
     //function to deal with a like button being pressed on a post
-    likedPostID=request.body.likedPostID
-    likedByUser=request.session.userid
+    likedPostID = request.body.likedPostID
+    likedByUser = request.session.userid
     await postData.likePost(likedPostID, likedByUser)
     // console.log(likedByUser+" liked "+likedPostID)
     response.json(
-        {posts:await postData.getPosts(5)}
+        { posts: await postData.getPosts(5) }
     )
 })
 
-app.post('/comment', async (request, response)=>{
+app.post('/comment', async (request, response) => {
     //function to deal with a like button being pressed on a post
-    let commentedPostID=request.body.postid
-    let comment=request.body.message
-    let commentByUser=request.session.userid
+    let commentedPostID = request.body.postid
+    let comment = request.body.message
+    let commentByUser = request.session.userid
     await postData.commentOnPost(commentedPostID, commentByUser, comment)
     // response.json({post: await postData.getPost(commentedPostID)})
     response.redirect('/viewposts.html')
 })
 
-app.post('/getonepost', async (request, response) =>{
+app.post('/getonepost', async (request, response) => {
     // console.log(request.file)
-    let postid=request.body.post
+    let postid = request.body.post
     console.log(request.body)
-    response.json({post: await postData.getPost(request.body.post)})
+    response.json({ post: await postData.getPost(request.body.post) })
 })
 
 //controller for registering a new user
-app.post('/register', async (request, response)=>{
+app.post('/register', async (request, response) => {
     console.log(request.body)
-    let userData=request.body
+    let userData = request.body
     // console.log(userData.username)
-    if(await users.findUser(userData.username)){
+    if (await users.findUser(userData.username)) {
         console.log('user exists')
         response.json({
             status: 'failed',
-            error:'user exists'
+            error: 'user exists'
         })
     } else {
         users.newUser(userData.username, userData.password)
@@ -173,3 +173,28 @@ app.post('/register', async (request, response)=>{
     }
     console.log(users.getUsers())
 })
+
+
+// Route to handle the change password form submission
+app.post('/changepassword', async (request, response) => {
+    let currentPassword = request.body.currentPassword;
+    let newPassword = request.body.newPassword;
+    let confirmPassword = request.body.confirmPassword;
+    let userId = request.session.userid;
+
+    // Check if the new password matches the confirm password
+    if (newPassword !== confirmPassword) {
+        response.redirect('/passwordmismatch.html');
+        return;
+    }
+
+    // Check if the current password is correct
+    if (await users.checkPassword(userId, currentPassword)) {
+        // Update the user's password
+        await users.changePassword(userId, newPassword);
+        response.redirect('/passwordchanged.html');
+    } else {
+        response.redirect('/incorrectpassword.html');
+    }
+});
+

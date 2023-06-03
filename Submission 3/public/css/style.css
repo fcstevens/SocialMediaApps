@@ -1,20 +1,20 @@
-
-
 body {
-    background-color: #c2c3f5;
-    font-family: 'Ubuntu', sans-serif;
+  background-color: #c2c3f5;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 h1 {
-    color: #fff8e8;
-    font-size: 36px;
-    text-align: center; /* center the text horizontally */
+  color: #fff8e8;
+  font-size: 36px;
+  text-align: center;
+  /* center the text horizontally */
 }
 
 h2 {
-    color: #fff8e8;
-    font-size: 24px;
-    text-align: center; /* center the text horizontally */
+  color: #FEF2A6;
+  font-size: 32px;
+  text-align: center;
+  /* center the text horizontally */
 }
 
 h3 {
@@ -27,132 +27,170 @@ header {
   background-color: #fff8e8;
 }
 
-.picPet {
-  color: #f9d476;
+.logo {
+  width: 600px;
+  height: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #c2c3f5;
+}
+
+.logo-small {
+  width: 375px;
+  height: 25%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #c2c3f5;
 }
 
 /*navigation css section*/
 nav {
-    background-color: #4056A1; 
-    display: flex; 
-    justify-content: space-between; 
-    padding: 10px; 
-  }
-  
-  nav a {
-    color: #fff8e8; 
-    text-decoration: none; 
-    margin-right: 10px; 
-    font-size: 20px; 
-    font-weight: bold; 
-  }
-  
-  nav a:hover {
-    color: #edcfa1; 
-  }
+  height: 20%;
+  background-color: #4056A1;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+}
 
-  /* form container css*/
-.form-box, .message-form {
-    max-width: 400px; 
-    margin: 0 auto; /* center the form container horizontally */
-    padding: 20px; 
-    border: 6px solid #4056A1; /* add a border to the form container */
-    border-radius: 5px; 
-    display: flex; /* use flexbox for layout */
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center;
-    background-color: #fff8e8;
-  }
-  
-  
-  .form-field {
-    margin-bottom: 10px; 
-  }
-  
-  .form-field label {
-    display: block; 
-    font-weight: bold; 
-    color: #4056A1;
-    margin-bottom: 5px; 
-  }
-  
-  .form-field input {
-    width: 100%; 
-    padding: 10px; 
-    padding-top: 10px;
-    border: 3px solid #baaaf7	; 
-    border-radius: 5px; 
-  }
-  
-  .submitButton {
-    background-color: #baaaf7; 
-    color: #fff; 
-    border: #efe2ba; 
-    border-radius: 4px; 
-    padding: 10px 20px; 
-    font-size: 16px; 
-    cursor: pointer; 
-  }
-  
-  .submitButton:hover {
-    background-color: #F13C20; 
-  }
-  
+nav a {
+  color: #fff8e8;
+  text-decoration: none;
+  margin-right: 10px;
+  font-size: 26px;
+  font-weight: bold;
+}
 
-  button {
-    background-color:#f9d476;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    font-weight: bold
-  }
-  
-  button:hover {
-    background-color: #87e393;
-  }
+nav a:hover {
+  color: #f9d476;
+}
 
-  .newPostButton {
-    background-color: #f9d476;
-  }
+/* form container css*/
+.form-box,
+.message-form {
+  max-width: 40%;
+  margin: 0 auto;
+  /* center the form container horizontally */
+  padding: 20px;
+  border: 6px solid #4056A1;
+  /* add a border to the form container */
+  border-radius: 5px;
+  display: flex;
+  /* use flexbox for layout */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff8e8;
+}
 
-  .newPostButton:hover {
-    background-color: #F13C20;
-  }
-  .centre {
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    height: 5vh;
-  }
 
-   .feed-container {
-    background-color: #fff8e8;
-    border: 6px solid #4056A1;
-    max-width: 70%;
-    margin: 0 auto;
-    height: 60%;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.form-field {
+  margin-bottom: 10px;
+}
+
+.form-field label {
+  display: block;
+  font-weight: bold;
+  color: #4056A1;
+  margin-bottom: 5px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 10px;
+  padding-top: 10px;
+  border: 3px solid #baaaf7;
+  border-radius: 5px;
+}
+
+.submitButton {
+  background-color: #baaaf7;
+  color: #fff;
+  border: #efe2ba;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #F13C20;
+}
+
+
+button {
+  background-color: #f9d476;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-weight: bold
+}
+
+button:hover {
+  background-color: #87e393;
+}
+
+.newPostButton {
+  background-color: #f9d476;
+}
+
+.newPostButton:hover {
+  background-color: #F13C20;
+}
+
+.centre {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5vh;
+}
+
+.feed-container {
+  background-color: #fff8e8;
+  border: 6px solid #4056A1;
+  max-width: 70%;
+  margin: 0 auto;
+  height: 60%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  /* Adjust the height as needed */
+}
+
+.text-container p {
+  text-align: center;
+  color: #fff8e8;
+  font-size: 26px;
+  margin-left: 100px;
+  /* Adjust the margin as needed for the left blank space */
+  margin-right: 100px;
+  /* Adjust the margin as needed for the right blank space */
 }
 
 #recent-posts {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
-  
+
 
 /*profile section*/
 
