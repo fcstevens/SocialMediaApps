@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+    <title>Profile</title>
+    <script>
+      function showPopup(message) {
+        alert(message);
+      }
+    </script>
+    <script src="client.js"></script>
+  </head>
+  <body>
+    <nav>
+      <a href="app">
+        <img class="logo-nav" src="images/logo-navbar.png" />
+      </a>
+      <a href="login.html">Login</a>
+      <a href="logout.html">Logout</a>
+      <a href="register.html">Register</a>
+      <a class="picPet" href="app">Feed</a>
+      <a class="picPetMessage" href="message.html">Messages</a>
+      <a class="picPetProfile" href="profile.html">Profile</a>
+    </nav>
+    <br />
+
+    <h2>My Pic-A-Pet Profile</h2>
+
+    <br />
+    <div class="profile">
+      <h3>Your Profile</h3>
+      <div>
+        <img class="profile-picture" src="images/logo-small.PNG.png" />
+      </div>
+      <div class="profile-info">
+        <h3 class="profile-name">Welcome, <%= username %></h3>
+        <h3 class="profile-bio"></h3>
+        <div class="profile-stats">
+          <h3>12 followers</h3>
+          <h3>9 following</h3>
+        </div>
+      </div>
+      <br />
+    </div>
+    <br />
+    <h2>Change User Details</h2>
+    <div class="form-box">
+      <h3>Change Username</h3>
+      <form
+        action="/changeusername"
+        method="POST"
+        onsubmit="event.preventDefault(); changeUsername();"
+      >
+        <label for="newUsername">New Username:</label>
+        <input
+          class="form-field input"
+          type="text"
+          id="newUsername"
+          name="newUsername"
+          required
+        />
+        <br />
+        <label for="password">Password:</label>
+        <input
+          class="form-field input"
+          type="password"
+          id="password"
+          name="password"
+          required
+        />
+        <br />
+        <input class="submitButton" type="submit" value="Change Username" />
+      </form>
+
+      <script>
+        async function changeUsername() {
+          const form = document.querySelector("form");
+          const newUsername = document.getElementById("newUsername").value;
+          const password = document.getElementById("password").value;
+
+          const response = await fetch("/changeusername", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ newUsername, password }),
+          });
+
+          const result = await response.json();
+
+          if (result.status === "success") {
+            showPopup("Username changed successfully!");
+            form.reset();
+          } else {
+            showPopup("Username change failed. Please try again.");
+          }
+        }
+      </script>
+
+      <br />
+      <h3>Want to change password?</h3>
+      <a href="changepassword.html">Click Here </a>
+    </div>
+    <br />
+  </body>
+</html>

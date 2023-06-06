@@ -14,15 +14,19 @@
     <title>Pic-A-Pet</title>
   </head>
   <body>
-    <img class="logo" src="images/Pic-A-Pet Logo.PNG.png" />
     <nav>
+      <a href="app">
+        <img class="logo-nav" src="images/logo-navbar.png" />
+      </a>
       <a href="login.html">Login</a>
       <a href="logout.html">Logout</a>
       <a href="register.html">Register</a>
       <a class="picPet" href="app">Feed</a>
-      <a href="profile.html">Profile</a>
-      <a href="message.html">Messages</a>
+      <a class="picPetMessage" href="message.html">Messages</a>
+      <a class="picPetProfile" href="profile.html">Profile</a>
     </nav>
+    <br />
+
     <h2>
       Welcome to Pic-a-Pet, a social media platform for all animal related
       content!
@@ -35,13 +39,15 @@
       enctype="multipart/form-data"
       method="POST"
     >
-      <label class="form-field label">Post-a-pet!</label>
+      <h3>Post-a-pet!</h3>
+      <label class="form-field label">Attach a Photo</label>
       <input
         class="form-field input"
         type="file"
         name="myImage"
         accept="image/*"
       />
+      <h3>Add a comment to your photo!</h3>
       <input
         class="form-field input"
         type="text"
@@ -51,4 +57,11 @@
       <input class="submitButton" type="submit" value="Post" />
     </form>
   </body>
+  <footer>
+    <p>Tel: +44 131 496 0418</p>
+    <br />
+    <p>Pic-A-Pet Copyright Protected©</p>
+    <br />
+    <p>Email: Happytohelpapet@gmail.com</p>
+  </footer>
 </html>

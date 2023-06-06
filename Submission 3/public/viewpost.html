@@ -15,36 +15,47 @@
 
     <style>
       #post-img {
-        width: 60%;
+        width: 80%;
+        padding-top: 20px;
       }
     </style>
   </head>
   <body>
-    <img class="logo" src="images/Pic-A-Pet Logo.PNG.png" />
     <nav>
+      <a href="app">
+        <img class="logo-nav" src="images/logo-navbar.png" />
+      </a>
       <a href="login.html">Login</a>
       <a href="logout.html">Logout</a>
       <a href="register.html">Register</a>
       <a class="picPet" href="app">Feed</a>
-      <a href="profile.html">Profile</a>
-      <a href="message.html">Messages</a>
+      <a class="picPetMessage" href="message.html">Messages</a>
+      <a class="picPetProfile" href="profile.html">Profile</a>
     </nav>
-    <h2>Comment</h2>
     <br />
-    <div>
+
+    <h2>Posted Pet</h2>
+    <br />
+    <div id="recentPostsListContainer">
       <div id="post">
         <img id="post-img" src="" alt="" />
-        <p><span>message:</span><span id="post-message"></span></p>
+        <p>
+          <h3> Caption:</h3>
+          <span id="post-message">message:</span><span id="post-message"></span>
+        </p>
       </div>
-      <form id="comment-form" action="/comment" method="POST">
-        <label>Comment</label>
-        <input type="text" id="message" name="message" /><br />
-        <input type="submit" value="Post Comment" />
-      </form>
       <div id="comments">
+        <h3> Comment Section:</h3>
         <ul id="post-comments"></ul>
-      </div>
     </div>
+    <form id="comment-form" action="/comment" method="POST">
+      <label for="message">Enter a comment:</label>
+      <input type="text" id="message" name="message" /><br />
+      <input type="submit" value="Post Comment" />
+    </form>
+  </div>
+  <br>
+  
 
     <script>
       //get js pointers to the html elements
@@ -103,6 +114,31 @@
           });
           postComments.appendChild(commentsUL);
         }
+      }
+
+      // ...
+      function deletePost(postId) {
+        fetch("/deletepost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ postId }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.success) {
+              // Post deleted successfully, redirect to the feed
+              window.location.href = "/app";
+            } else {
+              // Show an error message if post deletion fails
+              alert("Error deleting post");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Error deleting post");
+          });
       }
     </script>
   </body>

@@ -1,14 +1,39 @@
-
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
     username: String,
     password: String,
-    loggedin: Boolean
+    loggedin: Boolean,
+    messages: [{
+        sender: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        pet: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Pet',
+            required: true
+        },
+        action: {
+            type: String,
+            enum: ['Meet', 'Walk', 'Pet-sit'],
+            required: true
+        },
+        message: {
+            type: String,
+            required: true
+        },
+        isRead: {
+            type: Boolean,
+            default: false
+        }
+    }]
 });
 
 const User = model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
 
 async function newUser(username, password) {
     const user = { username: username, password: password, loggedin: false };
@@ -63,7 +88,7 @@ async function setLoggedIn(username, state) {
     let user = await findUser(username);
     if (user) {
         user.loggedin = state;
-        user.save();
+        await user.save(); // Save the changes to the database
     }
 }
 
@@ -75,10 +100,35 @@ async function isLoggedIn(username) {
     return false;
 }
 
-exports.newUser = newUser;
-exports.getUsers = getUsers;
-exports.findUser = findUser;
-exports.checkPassword = checkPassword;
-exports.setLoggedIn = setLoggedIn;
-exports.isLoggedIn = isLoggedIn;
-exports.changePassword = changePassword;
+// Function to change the username of a user
+async function changeUsername(userId, newUsername) {
+    try {
+        const user = await User.findOneAndUpdate(
+            { _id: userId },
+            { username: newUsername },
+            { new: true }
+        );
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        await user.save(); // Save the changes to the database
+
+        return user;
+    } catch (error) {
+        throw new Error('Error updating username');
+    }
+}
+
+module.exports = {
+    newUser,
+    getUsers,
+    findUser,
+    checkPassword,
+    setLoggedIn,
+    isLoggedIn,
+    changePassword,
+    changeUsername
+};
+

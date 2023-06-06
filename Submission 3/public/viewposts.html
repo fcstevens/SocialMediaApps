@@ -14,28 +14,31 @@
     <title>Pic-A-Pet</title>
     <style>
       img.post-image-thumbnail {
-        width: 90%;
+        width: 50%;
         padding-left: 10px;
         padding-top: 10px;
       }
     </style>
   </head>
   <body>
-    <img class="logo" src="images/Pic-A-Pet Logo.PNG.png" />
     <nav>
+      <a href="app">
+        <img class="logo-nav" src="images/logo-navbar.png" />
+      </a>
       <a href="login.html">Login</a>
       <a href="logout.html">Logout</a>
       <a href="register.html">Register</a>
       <a class="picPet" href="app">Feed</a>
-      <a href="profile.html">Profile</a>
-      <a href="message.html">Messages</a>
+      <a class="picPetMessage" href="message.html">Messages</a>
+      <a class="picPetProfile" href="profile.html">Profile</a>
     </nav>
-    <h2>
+    <br />
+    <h1>
       Welcome to Pic-a-Pet, a social media platform for all animal related
       content!
-    </h2>
+    </h1>
     <div class="text-container">
-      <p>
+      <h3>
         Welcome to our social media app for pet lovers! This is a platform
         designed for people who love animals and want to connect with other pet
         owners. Our app allows you to share photos and stories of your pets,
@@ -44,16 +47,15 @@
         furry friend, this app is the perfect place for you to connect with
         others who share your passion for animals. Join our community today and
         start sharing your love for pets!
-      </p>
+      </h3>
     </div>
-    <br />
     <h2>Recent Posts</h2>
 
     <div class="centre">
-      <button class="newPostButton" onclick="newPostPage()">New Post</button>
+      <button class="newPostButton" onclick="newPostPage()">Post</button>
     </div>
     <br />
-    <div class="feed-container">
+    <div id="recentPostsListContainer">
       <div>
         <ul id="recent-posts"></ul>
       </div>
@@ -86,6 +88,24 @@
           //add a unique attribute for the like button so it knows which post it belongs to
           button.setAttribute("data-post-id", post._id.toString());
 
+          // Create a 'message' button and input field
+          let messageButton = document.createElement("button");
+          messageButton.textContent = "Message";
+          messageButton.classList.add("message-btn");
+          messageButton.setAttribute("data-pet-id", post._id.toString());
+
+          let messageInput = document.createElement("input");
+          messageInput.type = "text";
+          messageInput.classList.add("message-input");
+          messageInput.placeholder = "Enter your message";
+
+          // Create a 'delete' button
+          let deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.addEventListener("click", function () {
+            deletePost(post._id);
+          });
+
           //create a 'view and comment' button
           let viewButton = document.createElement("button");
           viewButton.textContent = "view and comment";
@@ -108,7 +128,10 @@
 
           li.appendChild(liText);
           li.appendChild(button);
+          li.appendChild(deleteButton);
           li.appendChild(viewButton);
+          li.appendChild(messageButton);
+          li.appendChild(messageInput);
           // grab the comments list
           let comments = post.comments;
           if (comments.length > 0) {
@@ -165,6 +188,35 @@
       function newPostPage() {
         window.location = window.location =
           window.location.origin + "/newpost.html";
+      }
+
+      function deletePost(postId) {
+        let options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        fetch(`/deletepost/${postId}`, options)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Post deleted successfully
+              // Refresh the posts after deletion
+              fetch("/getposts")
+                .then((response) => response.json())
+                .then((fetchedData) => {
+                  recentPosts = fetchedData.posts;
+                  handleServerData();
+                });
+            } else {
+              console.log("Post deletion failed");
+            }
+          })
+          .catch((error) => {
+            console.log("Error occurred during post deletion:", error);
+          });
       }
     </script>
   </body>

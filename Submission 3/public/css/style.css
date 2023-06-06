@@ -1,9 +1,19 @@
+html,
 body {
   background-color: #c2c3f5;
   font-family: 'Ubuntu', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-h1 {
+body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+}
+
+body h1 {
   color: #fff8e8;
   font-size: 36px;
   text-align: center;
@@ -19,12 +29,34 @@ h2 {
 
 h3 {
   color: #4056A1;
-  font-size: 15px;
+  font-size: 22px;
   text-align: center;
 }
 
 header {
   background-color: #fff8e8;
+}
+
+footer {
+  margin-top: 40px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5%;
+  padding-left: 15px;
+  background-color: #fef2a6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+footer p {
+  text-decoration: none;
+  margin-right: 35px;
+  color: #4056A1;
+  font-weight: bold;
 }
 
 .logo {
@@ -45,6 +77,8 @@ header {
   background-color: #c2c3f5;
 }
 
+
+
 /*navigation css section*/
 nav {
   height: 20%;
@@ -52,18 +86,41 @@ nav {
   display: flex;
   justify-content: space-between;
   padding: 30px;
+  align-items: center;
 }
 
 nav a {
   color: #fff8e8;
   text-decoration: none;
   margin-right: 10px;
-  font-size: 26px;
+  font-size: 32px;
   font-weight: bold;
 }
 
 nav a:hover {
   color: #f9d476;
+}
+
+.logo-nav {
+  cursor: pointer;
+  filter: brightness(100%);
+  transition: filter 0.3s ease;
+}
+
+.logo-nav:hover {
+  filter: brightness(70%);
+}
+
+.picPet {
+  color: #FEF2A6;
+}
+
+.picPetProfile {
+  color: #baaaf7;
+}
+
+.picPetMessage {
+  color: #FEF2A6;
 }
 
 /* form container css*/
@@ -138,12 +195,73 @@ button:hover {
   background-color: #87e393;
 }
 
-.newPostButton {
+.newPostButton,
+input[type="submit"] {
+  color: #fff;
   background-color: #f9d476;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+
 }
 
-.newPostButton:hover {
+.newPostButton:hover,
+input:hover[type="submit"] {
   background-color: #F13C20;
+  cursor: pointer;
+}
+
+#message {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 3px solid #baaaf7;
+  border-radius: 5px;
+  font-size: 22px;
+  color: #4056A1;
+  font-size: 22px;
+  text-align: center;
+}
+
+/* Style the comments container */
+#comments {
+
+  margin-top: 5px;
+  border: 3px #e1bc5e;
+  border-radius: 5px;
+  padding: 10px
+}
+
+#comment-form {
+  padding-bottom: 20px;
+}
+
+/* Style the comments list */
+#post-comments {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Style the individual comment items */
+#post-comments li,
+label {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  color: #4056A1;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#post-message {
+  color: #baaaf7;
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .centre {
@@ -153,25 +271,13 @@ button:hover {
   height: 5vh;
 }
 
-.feed-container {
-  background-color: #fff8e8;
-  border: 6px solid #4056A1;
-  max-width: 70%;
-  margin: 0 auto;
-  height: 60%;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 .text-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 200px;
-  /* Adjust the height as needed */
+  padding: 20px;
 }
 
 .text-container p {
@@ -189,6 +295,25 @@ button:hover {
   padding: 0;
   margin: 0;
   width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#recentPostsListContainer {
+  background-color: #fff8e8;
+  border: 6px solid #4056A1;
+  max-width: 70%;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  height: 60%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
 }
 
 
@@ -204,12 +329,13 @@ button:hover {
 }
 
 .profile-picture {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
   margin: 0 auto;
   justify-content: center;
   display: block;
+  background-color: #c2c3f5;
 }
 
 .profile-info {

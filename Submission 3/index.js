@@ -1,196 +1,161 @@
 require('dotenv').config();
-//const mongoDBPassword=process.env.MYMONGODBPASSWORD
-const sessionSecret = process.env.MYSESSIONSECRET
+
+const express = require('express');
+const session = require('express-session');
+const app = express();
+const ejs = require('ejs');
+const path = require('path');
+const User = require('./models/User');
+const Pet = require('./models/Pet');
 
 
-const express = require('express')
-const app = express()
-app.listen(3000, () => console.log('listening at port 3000'))
 
+app.listen(3000, () => console.log('listening at port 3000'));
 
-//serve unspecified static pages from our public dir
-app.use(express.static('public'))
-//make express middleware for json available
-app.use(express.json())
+// Load environment variables
+const sessionSecret = process.env.MYSESSIONSECRET;
 
-//allows us to process post info in urls
+// Configure view engine and views directory
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve unspecified static pages from the public directory
+app.use(express.static('public'));
+
+// Enable JSON parsing middleware
+app.use(express.json());
+
+// Enable URL-encoded form data parsing middleware
 app.use(express.urlencoded({ extended: false }));
 
-const path = require('path');
-
-//multer allows processing multipart forms with images
-const multer = require('multer');
-
-const upload = multer({ dest: './public/uploads/' })
-
-
-//consts to hold expiry times in ms
-const threeMins = 1000 * 60 * 3;
-const oneHour = 1000 * 60 * 60;
-
-//use the sessions module and the cookie parser module
-const sessions = require('express-session');
-const cookieParser = require("cookie-parser");
-
-//make cookie parser middleware available
-app.use(cookieParser());
-
-//load sessions middleware, with some config
-app.use(sessions({
+// Configure sessions middleware
+app.use(session({
     secret: sessionSecret,
     saveUninitialized: true,
-    cookie: { maxAge: oneHour },
+    cookie: { maxAge: 3600000 }, // 1 hour
     resave: false
 }));
 
-//load mongoose module and connect to MongoDB instance and database
-
+// Configure mongoose and connect to MongoDB
 const mongoose = require('mongoose');
-mongoose.connect(`mongodb+srv://CCO6005-01:black.D0g@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://CCO6005-01:black.D0g@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`),
+{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+};
 
-//importing our own node module
-const users = require('./models/User')
-
-//load our Post model
+// Load models and modules
+const users = require('./models/User');
 const postData = require('./models/Post');
+const multer = require('multer');
+const upload = multer({ dest: './public/uploads/' });
 
-//test that user is logged in with a valid session
+// Middleware to check if a user is logged in
 function checkLoggedIn(request, response, nextAction) {
-    if (request.session) {
-        if (request.session.userid) {
-            nextAction()
-        } else {
-            request.session.destroy()
-            return response.redirect('/notloggedin.html')
-        }
+    if (request.session && request.session.userid) {
+        nextAction();
+    } else {
+        response.redirect('/notloggedin.html');
     }
 }
 
-//controller for the main app view, depends on user logged in state
+// Main app view controller, depends on user logged-in state
 app.get('/app', checkLoggedIn, (request, response) => {
-    // response.redirect('./application.html')
-    response.redirect('./viewposts.html')
-})
+    response.redirect('/viewposts.html');
+});
 
-
-//controller for logout
+// Logout controller
 app.post('/logout', async (request, response) => {
+    await users.setLoggedIn(request.session.userid, false);
+    request.session.destroy();
+    response.redirect('/loggedout.html');
+});
 
-    await users.setLoggedIn(request.session.userid, false)
-    request.session.destroy()
-    await console.log(users.getUsers())
-    response.redirect('./loggedout.html')
-})
-
-//controller for login
+// Login controller
 app.post('/login', async (request, response) => {
-    console.log(request.body)
-    let userData = request.body
-    console.log(userData)
+    const userData = request.body;
+    const userExists = await users.findUser(userData.username);
 
-    if (await users.findUser(userData.username)) {
-        console.log('user found')
-        if (await users.checkPassword(userData.username, userData.password)) {
-            console.log('password matches')
-            request.session.userid = userData.username
-            await users.setLoggedIn(userData.username, true)
-            response.redirect('/viewposts.html')
+    if (userExists) {
+        const passwordMatches = await users.checkPassword(userData.username, userData.password);
+
+        if (passwordMatches) {
+            request.session.userid = userData.username; // Set the userid in the session
+            await users.setLoggedIn(userData.username, true);
+            response.redirect('/viewposts.html');
         } else {
-            console.log('password wrong')
-            response.redirect('/loginfailed.html')
+            response.redirect('/loginfailed.html');
         }
     } else {
-        console.log('no such user')
-        response.redirect('/loginfailed.html')
+        response.redirect('/loginfailed.html');
     }
-})
+});
 
 
+// New post controller
 app.post('/newpost', upload.single('myImage'), async (request, response) => {
-    // console.log(request.file)
-    let filename = null
-    if (request.file && request.file.filename) { //check that a file was passes with a valid name
-        filename = 'uploads/' + request.file.filename
+    let filename = null;
+    if (request.file && request.file.filename) {
+        filename = 'uploads/' + request.file.filename;
     }
-    await postData.addNewPost(request.session.userid, request.body, filename)
-    response.redirect('/viewposts.html')
-})
+    await postData.addNewPost(request.session.userid, request.body, filename);
+    response.redirect('/viewposts.html');
+});
 
-
-
-
-// async/await version of /getposts controller using Mongo
+// Get posts controller
 app.get('/getposts', async (request, response) => {
-    response.json(
-        { posts: await postData.getPosts(5) }
-    )
-})
+    response.json({ posts: await postData.getPosts(5) });
+});
 
-
-//controller for handling a post being liked
+// Like controller
 app.post('/like', async (request, response) => {
-    //function to deal with a like button being pressed on a post
-    likedPostID = request.body.likedPostID
-    likedByUser = request.session.userid
-    await postData.likePost(likedPostID, likedByUser)
-    // console.log(likedByUser+" liked "+likedPostID)
-    response.json(
-        { posts: await postData.getPosts(5) }
-    )
-})
+    const likedPostID = request.body.likedPostID;
+    const likedByUser = request.session.userid;
+    await postData.likePost(likedPostID, likedByUser);
+    response.json({ posts: await postData.getPosts(5) });
+});
 
+// Comment controller
 app.post('/comment', async (request, response) => {
-    //function to deal with a like button being pressed on a post
-    let commentedPostID = request.body.postid
-    let comment = request.body.message
-    let commentByUser = request.session.userid
-    await postData.commentOnPost(commentedPostID, commentByUser, comment)
-    // response.json({post: await postData.getPost(commentedPostID)})
-    response.redirect('/viewposts.html')
-})
+    const commentedPostID = request.body.postid;
+    const comment = request.body.message;
+    const commentByUser = request.session.userid;
+    await postData.commentOnPost(commentedPostID, commentByUser, comment);
+    response.redirect('/viewposts.html');
+});
 
+// Get one post controller
 app.post('/getonepost', async (request, response) => {
-    // console.log(request.file)
-    let postid = request.body.post
-    console.log(request.body)
-    response.json({ post: await postData.getPost(request.body.post) })
-})
+    const postid = request.body.post;
+    response.json({ post: await postData.getPost(postid) });
+});
 
-//controller for registering a new user
+// Register controller
 app.post('/register', async (request, response) => {
-    console.log(request.body)
-    let userData = request.body
-    // console.log(userData.username)
+    const userData = request.body;
+
     if (await users.findUser(userData.username)) {
-        console.log('user exists')
-        response.json({
-            status: 'failed',
-            error: 'user exists'
-        })
+        response.json({ status: 'failed', error: 'user exists' });
     } else {
-        users.newUser(userData.username, userData.password)
-        response.redirect('/registered.html')
+        users.newUser(userData.username, userData.password);
+        response.redirect('/registered.html');
     }
-    console.log(users.getUsers())
-})
+});
 
-
-// Route to handle the change password form submission
+// Change password controller
 app.post('/changepassword', async (request, response) => {
-    let currentPassword = request.body.currentPassword;
-    let newPassword = request.body.newPassword;
-    let confirmPassword = request.body.confirmPassword;
-    let userId = request.session.userid;
+    const currentPassword = request.body.currentPassword;
+    const newPassword = request.body.newPassword;
+    const confirmPassword = request.body.confirmPassword;
+    const userId = request.session.userid;
 
-    // Check if the new password matches the confirm password
     if (newPassword !== confirmPassword) {
         response.redirect('/passwordmismatch.html');
         return;
     }
 
-    // Check if the current password is correct
     if (await users.checkPassword(userId, currentPassword)) {
-        // Update the user's password
         await users.changePassword(userId, newPassword);
         response.redirect('/passwordchanged.html');
     } else {
@@ -198,3 +163,124 @@ app.post('/changepassword', async (request, response) => {
     }
 });
 
+// Forgot password controller
+app.post('/forgotpassword', async (request, response) => {
+    const username = request.body.username;
+    const newPassword = request.body.newPassword;
+    const user = await users.findUser(username);
+
+    if (user) {
+        await users.changePassword(username, newPassword);
+        response.redirect('/passwordchanged.html');
+    } else {
+        response.redirect('/passwordmismatch.html');
+    }
+});
+
+// Change username controller
+const { changeUsername } = require('./models/User');
+
+app.post('/changeusername', async (request, response) => {
+    const newUsername = request.body.newUsername;
+    const password = request.body.password;
+    const userId = request.session.userid;
+
+    if (await users.checkPassword(userId, password)) {
+        try {
+            const updatedUser = await changeUsername(userId, newUsername);
+            console.log(updatedUser);
+            response.json({ status: 'success' });
+        } catch (error) {
+            console.log(error);
+            response.status(500).json({ status: 'failed', error: 'Error updating username' });
+        }
+    } else {
+        response.status(401).json({ status: 'failed', error: 'Incorrect password' });
+    }
+});
+
+// Profile page controller
+app.get('/profile.html', (request, response) => {
+    const username = request.session.userid;
+    response.render('profile', { username: username });
+});
+
+
+// Delete post controller
+app.post("/deletepost/:postId", async (request, response) => {
+    const postId = request.params.postId;
+    const userId = request.session.userid; // Retrieve the user ID from the session
+
+    if (!userId) {
+        // User is not logged in, redirect or send an error response
+        response.status(401).json({ success: false, error: 'Unauthorized' });
+        return;
+    }
+
+    try {
+        const deleted = await postData.deletePost(postId, userId); // Pass the userId to the deletePost function
+        if (deleted) {
+            response.json({ success: true });
+        } else {
+            response.json({ success: false });
+        }
+    } catch (error) {
+        console.log(error);
+        response.json({ success: false });
+    }
+});
+
+// Inside index.js
+app.post('/send-message', async (req, res) => {
+    try {
+        const { petId, message } = req.body;
+        const sender = req.session.userid; // Assuming you have the user's session stored
+
+        // Find the recipient's user based on the petId
+        const pet = await Pet.findById(petId).populate('user');
+        const recipient = pet.user;
+
+        // Create the message object
+        const newMessage = {
+            sender: sender._id,
+            pet: pet._id,
+            action: '', // Add the desired action here ('Meet', 'Walk', 'Pet-sit', etc.)
+            message: message
+        };
+
+        // Add the message to the sender and recipient's user documents
+        sender.messages.push(newMessage);
+        recipient.messages.push(newMessage);
+
+        // Save the changes
+        await sender.save();
+        await recipient.save();
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error sending message:', error);
+        res.status(500).json({ success: false, error: 'Failed to send message' });
+    }
+});
+
+app.get('/profile', async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userid).populate('messages.pet');
+        res.render('profile', { user });
+    } catch (error) {
+        console.error('Error retrieving user profile:', error);
+        res.status(500).send('Failed to retrieve user profile');
+    }
+});
+
+// Inside index.js
+app.get('/get-messages', async (req, res) => {
+    try {
+        const user = await User.findById(req.session.user._id).populate('messages.sender messages.pet');
+        const messages = user.messages;
+        res.json({ messages });
+    } catch (error) {
+        console.error('Error retrieving messages:', error);
+        res.status(500).json({ error: 'Failed to retrieve messages' });
+    }
+});
