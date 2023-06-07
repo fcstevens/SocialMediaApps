@@ -15,6 +15,30 @@
         width: 80%;
         padding-top: 20px;
       }
+      #icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.icon-text {
+  margin-top: 5px;
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 14px;
+  color: #888;
+}
+
+.icon-wrapper:hover .icon-text {
+  color: #000;
+}
     </style>
   </head>
   <body>
@@ -45,24 +69,44 @@
         <h3> Comment Section:</h3>
         <ul id="post-comments"></ul>
       </div>
+      <br>
       <form id="comment-form" action="/comment" method="POST">
         <label for="message">Enter a comment:</label>
         <input type="text" id="message" name="message" /><br />
         <input type="submit" value="Post Comment" />
       </form>
-      <div id="message-section">
-        <h3>Message the Poster:</h3>
-        <input type="text" id="message-input" placeholder="Enter your message" />
-        <img id="walk-icon" src="images/walk.png" alt="Walk" />
-        <img id="meet-icon" src="images/meet.png" alt="Meet" />
-        <img id="petsit-icon" src="images/petsit.png" alt="Petsit" />
-      </div>
     </div>
     <br>
-    <!-- Add the form and button to view messages -->
+
+    <div id="recentPostsListContainer">
+      <div id="message-section">
+        <h3>Message the Poster and select what activity you wish to do:</h3>
+        <input id="comment-form" type="text" id="message-input" placeholder="Enter your message" />
+        <div id="icon-container">
+         
+          <div class="icon-wrapper">
+            <img id="walk-icon" src="images/walk.png" alt="Walk" />
+            <p class="icon-text">Walk</p>
+          </div>
+          <div class="icon-wrapper">
+            <img id="meet-icon" src="images/meet.png" alt="Meet" />
+            <p class="icon-text">Meet</p>
+          </div>
+          <div class="icon-wrapper">
+            <img id="petsit-icon" src="images/petsit.png" alt="Petsit" />
+            <p class="icon-text">Petsit</p>
+          </div>
+        </div>
+               <!-- Add the form and button to view messages -->
     <form action="/message" method="GET">
       <button type="submit">View Messages</button>
     </form>
+      </div>
+      
+      </div>
+    
+    <br>
+    
 
     <script>
       // Get references to the HTML elements

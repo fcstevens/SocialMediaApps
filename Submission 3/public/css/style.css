@@ -133,6 +133,13 @@ nav a:hover {
   background-color: #fff8e8;
 }
 
+.message-section,
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .form-field {
   margin-bottom: 10px;
 }
