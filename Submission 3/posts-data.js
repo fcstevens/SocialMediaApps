@@ -32,5 +32,5 @@ async function getMessages() {
 module.exports = {
     addNewPost,
     getPosts,
-    getMessages
+    getMessages,
 };

@@ -78,23 +78,16 @@
           let li = document.createElement("li");
           let liText = document.createElement("p");
           liText.textContent = `${post.message} (by ${post.postedBy}) [likes:${post.likes}]`;
+          liText.style.color = "#4056a1";
+          liText.style.fontSize = "22px";
+          liText.style.fontWeight = "bold";
+          liText.style.textAlign = "center";
 
           // Create a 'like' button
           let button = document.createElement("button");
           button.textContent = "Like";
           button.addEventListener("click", processLike);
           button.setAttribute("data-post-id", post._id.toString());
-
-          // Create a 'message' button and input field
-          let messageButton = document.createElement("button");
-          messageButton.textContent = "Message";
-          messageButton.classList.add("message-btn");
-          messageButton.setAttribute("data-pet-id", post._id.toString());
-
-          let messageInput = document.createElement("input");
-          messageInput.type = "text";
-          messageInput.classList.add("message-input");
-          messageInput.placeholder = "Enter your message";
 
           // Create a 'delete' button
           let deleteButton = document.createElement("button");
@@ -105,7 +98,7 @@
 
           // Create a 'view and comment' button
           let viewButton = document.createElement("button");
-          viewButton.textContent = "View and Comment";
+          viewButton.textContent = "Comment and Message";
           viewButton.addEventListener("click", processView);
           viewButton.setAttribute("view-post-id", post._id.toString());
 
@@ -126,8 +119,6 @@
           li.appendChild(button);
           li.appendChild(deleteButton);
           li.appendChild(viewButton);
-          li.appendChild(messageButton);
-          li.appendChild(messageInput);
 
           // Display comments if available
           let comments = post.comments;
@@ -137,6 +128,9 @@
               let commentLi = document.createElement("li");
               let commentLiText = document.createElement("p");
               commentLiText.textContent = `${comment.message} (by ${comment.user}) [likes:${comment.likes}]`;
+              commentLiText.style.color = "#4056a1";
+              commentLiText.style.fontSize = "20px";
+              commentLiText.style.textAlign = "center";
               commentLi.appendChild(commentLiText);
               commentsUL.appendChild(commentLi);
             });

@@ -6,9 +6,14 @@ const app = express();
 const ejs = require('ejs');
 const path = require('path');
 const User = require('./models/User');
+
 const users = require('./users');
 
 const postData = require('./models/Post');
+const { getPosts } = require('./posts-data');
+const { getMessages } = require('./posts-data');
+
+
 const { changePassword } = require('./models/User');
 
 
@@ -106,6 +111,12 @@ app.get('/getposts', async (request, response) => {
     response.json({ posts: await postData.getPosts(5) });
 });
 
+// Get one post controller
+app.post('/getonepost', async (request, response) => {
+    const postid = request.body.post;
+    response.json({ post: await getPosts(postid) });
+});
+
 // Like controller
 app.post('/like', async (request, response) => {
     const likedPostID = request.body.likedPostID;
@@ -123,11 +134,7 @@ app.post('/comment', async (request, response) => {
     response.redirect('/viewposts.html');
 });
 
-// Get one post controller
-app.post('/getonepost', async (request, response) => {
-    const postid = request.body.post;
-    response.json({ post: await postData.getPost(postid) });
-});
+
 
 // Register controller
 app.post('/register', async (request, response) => {
