@@ -44,43 +44,28 @@
     <!-- Heading -->
     <br />
     <div class="messages-section">
-      <h2>Messages</h2>
-      <!-- Heading -->
+      <h1>Messages</h1>
       <ul id="messages-list"></ul>
-      <!-- List for displaying messages -->
+      <h3>Send a Message</h3>
+      <form onsubmit="event.preventDefault(); sendMessage();">
+        <label for="sender">From:</label>
+        <input type="text" id="sender" required><br>
+        <label for="recipient">To:</label>
+        <input type="text" id="recipient" required><br>
+        <label for="message">Message:</label>
+        <input type="text" id="message" required><br>
+        <button type="submit">Send</button>
     </div>
 
     <h1>Received Messages</h1>
-    <!-- Heading -->
+    <form action="/getmessage" method="GET">
+      <button type="submit">View Messages</button>
+    </form>
+    
     <div id="message-container"></div>
     <!-- Container for received messages -->
 
-    <script>
-      const messageContainer = document.querySelector("#message-container");
-
-      // Fetch the received messages from the server
-      fetch("/getmessages")
-        .then((response) => response.json())
-        .then((serverResponse) => renderMessages(serverResponse.messages))
-        .catch((error) => {
-          console.log(error);
-          // Handle error
-        });
-
-      // Render the received messages
-      function renderMessages(messages) {
-        if (messages.length === 0) {
-          // No messages
-          messageContainer.innerText = "No Messages";
-        } else {
-          // Display the messages
-          messages.forEach((message) => {
-            const messageDiv = document.createElement("div");
-            messageDiv.textContent = message;
-            messageContainer.appendChild(messageDiv);
-          });
-        }
-      }
+    <script  src="/dashboard.js">
     </script>
     <footer>
       <p>Tel: +44 131 496 0418</p>

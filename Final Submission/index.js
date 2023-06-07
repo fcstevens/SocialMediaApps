@@ -12,10 +12,7 @@ const users = require('./users');
 const postData = require('./models/Post');
 const { getPosts } = require('./posts-data');
 const { getMessages } = require('./posts-data');
-
-
 const { changePassword } = require('./models/User');
-
 
 const multer = require('multer');
 const upload = multer({ dest: './public/uploads/' });
@@ -39,21 +36,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Configure sessions middleware
-app.use(session({
-    secret: sessionSecret,
-    saveUninitialized: true,
-    cookie: { maxAge: 3600000 }, // 1 hour
-    resave: false
-}));
+app.use(
+    session({
+        secret: sessionSecret,
+        saveUninitialized: true,
+        cookie: { maxAge: 3600000 }, // 1 hour
+        resave: false
+    })
+);
 
 // Configure mongoose and connect to MongoDB
 const mongoose = require('mongoose');
-mongoose.connect(`mongodb+srv://CCO6005-01:black.D0g@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`),
-{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
-};
+mongoose.connect(
+    `mongodb+srv://CCO6005-01:black.D0g@cluster0.lpfnqqx.mongodb.net/petAPP?retryWrites=true&w=majority`,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+);
 
 // Middleware to check if a user is logged in
 function checkLoggedIn(request, response, nextAction) {
@@ -82,7 +82,10 @@ app.post('/login', async (request, response) => {
     const userExists = await users.findUser(userData.username);
 
     if (userExists) {
-        const passwordMatches = await users.checkPassword(userData.username, userData.password);
+        const passwordMatches = await users.checkPassword(
+            userData.username,
+            userData.password
+        );
 
         if (passwordMatches) {
             request.session.userid = userData.username; // Set the userid in the session
@@ -133,8 +136,6 @@ app.post('/comment', async (request, response) => {
     await postData.commentOnPost(commentedPostID, commentByUser, comment);
     response.redirect('/viewposts.html');
 });
-
-
 
 // Register controller
 app.post('/register', async (request, response) => {
@@ -197,10 +198,14 @@ app.post('/changeusername', async (request, response) => {
             response.json({ status: 'success' });
         } catch (error) {
             console.log(error);
-            response.status(500).json({ status: 'failed', error: 'Error updating username' });
+            response
+                .status(500)
+                .json({ status: 'failed', error: 'Error updating username' });
         }
     } else {
-        response.status(401).json({ status: 'failed', error: 'Incorrect password' });
+        response
+            .status(401)
+            .json({ status: 'failed', error: 'Incorrect password' });
     }
 });
 
@@ -211,7 +216,7 @@ app.get('/profile.html', (request, response) => {
 });
 
 // Delete post controller
-app.post("/deletepost/:postId", async (request, response) => {
+app.post('/deletepost/:postId', async (request, response) => {
     const postId = request.params.postId;
     const userId = request.session.userid; // Retrieve the user ID from the session
 
@@ -235,13 +240,16 @@ app.post("/deletepost/:postId", async (request, response) => {
 });
 
 // Get messages controller
-app.get('/message', async (request, response) => {
+app.get('/getmessage', async (request, response) => {
     try {
-        const messages = await postData.getMessages();
-        response.render('message', { messages });
+        // Retrieve the messages from your data source (e.g., database)
+        const messages = await getMessages();
+
+        // Return the messages as a JSON response
+        response.json({ messages });
     } catch (error) {
-        console.error('Error retrieving messages:', error);
-        response.status(500).send('Internal Server Error');
+        console.error(error);
+        response.status(500).json({ error: 'Internal server error' });
     }
 });
 

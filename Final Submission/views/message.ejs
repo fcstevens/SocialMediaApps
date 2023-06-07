@@ -29,13 +29,18 @@
     <img class="logo-small" src="images/Pic-A-Pet Logo.PNG.png" />
 
     <% if (messages.length === 0) { %>
-    <p>No messages</p>
-    <% } else { %> <% messages.forEach((message) => { %>
-    <div>
-      <p><%= message.content %></p>
-      <p><%= message.sender %></p>
-    </div>
-    <% }) %> <% } %>
+    <p>No messages.</p>
+    <% } else { %>
+    <ul id="messages-list">
+      <% messages.forEach(message => { %>
+      <li>
+        <strong>From:</strong> <%= message.sender %><br />
+        <strong>To:</strong> <%= message.recipient %><br />
+        <strong>Message:</strong> <%= message.message %>
+      </li>
+      <% }); %>
+    </ul>
+    <% } %>
 
     <footer>
       <p>Tel: +44 131 496 0418</p>
