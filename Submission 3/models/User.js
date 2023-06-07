@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
+// Define the schema for the user
 const userSchema = new Schema({
     username: String,
     password: String,
@@ -9,65 +10,69 @@ const userSchema = new Schema({
         sender: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: true
+            required: true,
         },
         pet: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Pet',
-            required: true
+            required: true,
         },
         action: {
             type: String,
             enum: ['Meet', 'Walk', 'Pet-sit'],
-            required: true
+            required: true,
         },
         message: {
             type: String,
-            required: true
+            required: true,
         },
         isRead: {
             type: Boolean,
-            default: false
-        }
-    }]
+            default: false,
+        },
+    }],
 });
 
+// Create a model based on the schema
 const User = model('User', userSchema);
-module.exports = mongoose.model('User', userSchema);
 
+// Add a new user
 async function newUser(username, password) {
     const user = { username: username, password: password, loggedin: false };
-    await User.create(user).catch(err => {
+    await User.create(user).catch((err) => {
         console.log('Error:' + err);
     });
 }
 
+// Get all users
 async function getUsers() {
     let data = [];
     await User.find({})
         .exec()
-        .then(mongoData => {
+        .then((mongoData) => {
             data = mongoData;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log('Error:' + err);
         });
     return data;
 }
 
+// Find a user by username
 async function findUser(username) {
     let user = null;
     await User.findOne({ username: username })
         .exec()
-        .then(mongoData => {
+        .then((mongoData) => {
             user = mongoData;
         })
-        .catch(err => {
+        .catch((err) => {
             console.log('Error:' + err);
         });
     return user;
 }
 
+// Check if the password matches the user's password
 async function checkPassword(username, password) {
     let user = await findUser(username);
     if (user) {
@@ -76,6 +81,7 @@ async function checkPassword(username, password) {
     return false;
 }
 
+// Change the password of a user
 async function changePassword(username, newPassword) {
     let user = await findUser(username);
     if (user) {
@@ -84,6 +90,7 @@ async function changePassword(username, newPassword) {
     }
 }
 
+// Set the logged-in state of a user
 async function setLoggedIn(username, state) {
     let user = await findUser(username);
     if (user) {
@@ -92,6 +99,7 @@ async function setLoggedIn(username, state) {
     }
 }
 
+// Check if a user is logged in
 async function isLoggedIn(username) {
     let user = await findUser(username);
     if (user) {
@@ -100,7 +108,7 @@ async function isLoggedIn(username) {
     return false;
 }
 
-// Function to change the username of a user
+// Change the username of a user
 async function changeUsername(userId, newUsername) {
     try {
         const user = await User.findOneAndUpdate(
@@ -129,6 +137,5 @@ module.exports = {
     setLoggedIn,
     isLoggedIn,
     changePassword,
-    changeUsername
+    changeUsername,
 };
-

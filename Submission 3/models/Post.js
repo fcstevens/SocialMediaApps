@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
+// Define the schema for the post
 const postSchema = new Schema({
     postedBy: String,
     message: String,
@@ -15,9 +16,10 @@ const postSchema = new Schema({
     }]
 });
 
+// Create a model based on the schema
 const Post = model('MyPost', postSchema);
 
-
+// Add a new post
 function addNewPost(userID, post, imageFile) {
     let myPost = {
         postedBy: userID,
@@ -25,15 +27,14 @@ function addNewPost(userID, post, imageFile) {
         imagePath: imageFile,
         likes: 0,
         time: Date.now()
-    }
+    };
     Post.create(myPost)
         .catch(err => {
-            console.log('Error:' + err)
+            console.log('Error:' + err);
         });
 }
 
-
-//needs to be an async function so we can pause execution awaiting for data
+// Get a specified number of posts
 async function getPosts(n = 3) {
     let data = [];
     await Post.find({})
@@ -44,11 +45,12 @@ async function getPosts(n = 3) {
             data = mongoData;
         })
         .catch(err => {
-            console.log('Error:' + err)
+            console.log('Error:' + err);
         });
     return data;
 }
 
+// Get a specific post by its ID
 async function getPost(postid) {
     let data = null;
     await Post.findById(postid)
@@ -57,33 +59,31 @@ async function getPost(postid) {
             data = mongoData;
         })
         .catch(err => {
-            console.log('Error:' + err)
+            console.log('Error:' + err);
         });
     return data;
 }
 
+// Like a post
 async function likePost(likedPostID, likedByUser) {
-    // await Post.findByIdAndUpdate(likedPostID,{$inc: { likes: 1 }})
-    let found
+    let found;
     await Post.findByIdAndUpdate(likedPostID, { $inc: { likes: 1 } }).exec()
-        .then(foundData => found = foundData)
-    // console.log(found)
+        .then(foundData => found = foundData);
 }
 
-
+// Comment on a post
 async function commentOnPost(commentedPostID, commentByUser, comment) {
-    // await Post.findByIdAndUpdate(likedPostID,{$inc: { likes: 1 }})
-    let found
+    let found;
     let newComment = {
         user: commentByUser,
         message: comment,
         likes: 0
-    }
+    };
     await Post.findByIdAndUpdate(commentedPostID, { $push: { comments: newComment } }).exec()
-        .then(foundData => found = foundData)
-    // console.log(found)
+        .then(foundData => found = foundData);
 }
 
+// Delete a post
 const deletePost = async (postId, userId) => {
     try {
         const post = await Post.findOne({ _id: postId });
@@ -99,12 +99,15 @@ const deletePost = async (postId, userId) => {
         await Post.deleteOne({ _id: postId });
         return true; // Post deleted successfully
     } catch (error) {
-        throw new Error('Error deleting post');
+        throw new Error('Error deleting post: ' + error.message);
     }
 };
 
-
-
-
-// module.exports = Post;
-module.exports = { addNewPost, getPosts, getPost, likePost, commentOnPost, deletePost };
+module.exports = {
+    addNewPost,
+    getPosts,
+    getPost,
+    likePost,
+    commentOnPost,
+    deletePost
+};

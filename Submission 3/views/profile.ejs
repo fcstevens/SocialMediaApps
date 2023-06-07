@@ -13,8 +13,35 @@
     />
     <title>Profile</title>
     <script>
+      // Function to show a popup message
       function showPopup(message) {
         alert(message);
+      }
+
+      // Function to handle changing the username
+      async function changeUsername() {
+        const form = document.querySelector("form");
+        const newUsername = document.getElementById("newUsername").value;
+        const password = document.getElementById("password").value;
+
+        // Make a POST request to change the username
+        const response = await fetch("/changeusername", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ newUsername, password }),
+        });
+
+        const result = await response.json();
+
+        // Display a popup message based on the response
+        if (result.status === "success") {
+          showPopup("Username changed successfully!");
+          form.reset();
+        } else {
+          showPopup("Username change failed. Please try again.");
+        }
       }
     </script>
     <script src="client.js"></script>
@@ -81,34 +108,9 @@
         <input class="submitButton" type="submit" value="Change Username" />
       </form>
 
-      <script>
-        async function changeUsername() {
-          const form = document.querySelector("form");
-          const newUsername = document.getElementById("newUsername").value;
-          const password = document.getElementById("password").value;
-
-          const response = await fetch("/changeusername", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ newUsername, password }),
-          });
-
-          const result = await response.json();
-
-          if (result.status === "success") {
-            showPopup("Username changed successfully!");
-            form.reset();
-          } else {
-            showPopup("Username change failed. Please try again.");
-          }
-        }
-      </script>
-
       <br />
       <h3>Want to change password?</h3>
-      <a href="changepassword.html">Click Here </a>
+      <a href="changepassword.html">Click Here</a>
     </div>
     <br />
   </body>

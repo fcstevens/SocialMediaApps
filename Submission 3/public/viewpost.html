@@ -4,13 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css" /> <!-- Link to custom CSS file -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet" /> <!-- Link to Google Fonts -->
     <title>Pic-A-Pet</title>
 
     <style>
@@ -23,14 +20,14 @@
   <body>
     <nav>
       <a href="app">
-        <img class="logo-nav" src="images/logo-navbar.png" />
+        <img class="logo-nav" src="images/logo-navbar.png" alt="Logo" />
       </a>
-      <a href="login.html">Login</a>
-      <a href="logout.html">Logout</a>
-      <a href="register.html">Register</a>
-      <a class="picPet" href="app">Feed</a>
-      <a class="picPetMessage" href="message.html">Messages</a>
-      <a class="picPetProfile" href="profile.html">Profile</a>
+      <a href="login.html">Login</a> <!-- Login link -->
+      <a href="logout.html">Logout</a> <!-- Logout link -->
+      <a href="register.html">Register</a> <!-- Register link -->
+      <a class="picPet" href="app">Feed</a> <!-- Feed link -->
+      <a class="picPetMessage" href="message.html">Messages</a> <!-- Messages link -->
+      <a class="picPetProfile" href="profile.html">Profile</a> <!-- Profile link -->
     </nav>
     <br />
 
@@ -47,36 +44,95 @@
       <div id="comments">
         <h3> Comment Section:</h3>
         <ul id="post-comments"></ul>
+      </div>
+      <form id="comment-form" action="/comment" method="POST">
+        <label for="message">Enter a comment:</label>
+        <input type="text" id="message" name="message" /><br />
+        <input type="submit" value="Post Comment" />
+      </form>
+      <div id="message-section">
+        <h3>Message the Poster:</h3>
+        <input type="text" id="message-input" placeholder="Enter your message" />
+        <img id="walk-icon" src="images/walk.png" alt="Walk" />
+        <img id="meet-icon" src="images/meet.png" alt="Meet" />
+        <img id="petsit-icon" src="images/petsit.png" alt="Petsit" />
+      </div>
     </div>
-    <form id="comment-form" action="/comment" method="POST">
-      <label for="message">Enter a comment:</label>
-      <input type="text" id="message" name="message" /><br />
-      <input type="submit" value="Post Comment" />
+    <br>
+    <!-- Add the form and button to view messages -->
+    <form action="/message" method="GET">
+      <button type="submit">View Messages</button>
     </form>
-  </div>
-  <br>
-  
 
     <script>
-      //get js pointers to the html elements
+      // Get references to the HTML elements
       let postImage = document.querySelector("#post-img");
       let postMessage = document.querySelector("#post-message");
       let postComments = document.querySelector("#post-comments");
+      let messageInput = document.querySelector("#message-input");
+      let form = document.querySelector("#comment-form");
+      let walkIcon = document.querySelector("#walk-icon");
+      let meetIcon = document.querySelector("#meet-icon");
+      let petsitIcon = document.querySelector("#petsit-icon");
 
-      //get the postid from the url query string
+      walkIcon.addEventListener("click", () => {
+        sendMessage("walk");
+      });
+
+      meetIcon.addEventListener("click", () => {
+        sendMessage("meet");
+      });
+
+      petsitIcon.addEventListener("click", () => {
+        sendMessage("petsit");
+      });
+
+      // Get the postid from the URL query string
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       let selectedPost = urlParams.get("post");
 
-      let form = document.querySelector("#comment-form");
-      //add a hidden form field with the postid in it
+      // Add a hidden form field with the postid in it
       let hiddenField = document.createElement("input");
       hiddenField.setAttribute("type", "hidden");
       hiddenField.setAttribute("name", "postid");
       hiddenField.setAttribute("value", selectedPost);
       form.appendChild(hiddenField);
 
-      // Send comment form data as a post request with fetch
+      // Send comment form data as a POST request with fetch
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        let message = messageInput.value;
+        if (message.trim() === "") {
+          alert("Please enter a comment.");
+          return;
+        }
+
+        let formData = new FormData(form);
+        formData.append("message", message);
+
+        let options = {
+          method: "POST",
+          body: formData,
+        };
+
+        fetch("/comment", options)
+          .then((response) => response.json())
+          .then((serverResponse) => {
+            console.log(serverResponse);
+            // Handle success response
+            // Update the UI with the new comment if necessary
+          })
+          .catch((error) => {
+            console.log(error);
+            // Handle error
+          });
+
+        // Clear the input field
+        messageInput.value = "";
+      });
+
+      // Fetch post data
       let options = {
         method: "POST",
         headers: {
@@ -84,31 +140,36 @@
         },
         body: JSON.stringify({ post: selectedPost }),
       };
+
       fetch("/getonepost", options)
         .then((response) => response.json())
-        .then((serverResponse) => renderPost(serverResponse));
+        .then((serverResponse) => renderPost(serverResponse))
+        .catch((error) => {
+          console.log(error);
+          // Handle error
+        });
 
-      //render the retrieved post data in html
+      // Render the retrieved post data in HTML
       function renderPost(postData) {
         console.log(postData);
-        // show image if present
+        // Show image if present
         if (postData.post.imagePath) {
           postImage.src = postData.post.imagePath;
           postImage.alt = "temporary alt tag";
           postImage.classList.add("cl-post-image");
         } else {
-          //render a null image?
+          // Render a null image?
         }
         postMessage.innerText = postData.post.message;
         let comments = postData.post.comments;
         if (comments.length > 0) {
-          //add a list of comments
+          // Add a list of comments
           let commentsUL = document.createElement("ul");
           comments.forEach(function (comment) {
             let commentLi = document.createElement("li");
             let commentLiText = document.createElement("p");
             commentLiText.textContent = `${comment.message} (by ${comment.user}) [likes:${comment.likes}]`;
-            //add like button and code to handle like later
+            // Add like button and code to handle like later
             commentLi.appendChild(commentLiText);
             commentsUL.appendChild(commentLi);
           });
@@ -116,29 +177,43 @@
         }
       }
 
-      // ...
-      function deletePost(postId) {
-        fetch("/deletepost", {
+      // Function to send the message
+      function sendMessage(header) {
+        let message = messageInput.value;
+        if (message.trim() === "") {
+          alert("Please enter a message.");
+          return;
+        }
+
+        let fullMessage = `${header}: ${message}`;
+
+        let messageObj = {
+          message: fullMessage,
+          postId: selectedPost,
+        };
+
+        let options = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ postId }),
-        })
+          body: JSON.stringify(messageObj),
+        };
+
+        fetch("/sendmessage", options)
           .then((response) => response.json())
-          .then((result) => {
-            if (result.success) {
-              // Post deleted successfully, redirect to the feed
-              window.location.href = "/app";
-            } else {
-              // Show an error message if post deletion fails
-              alert("Error deleting post");
-            }
+          .then((serverResponse) => {
+            console.log(serverResponse);
+            // Handle success response
+            // Update the UI with the sent message if necessary
           })
           .catch((error) => {
             console.log(error);
-            alert("Error deleting post");
+            // Handle error
           });
+
+        // Clear the input field
+        messageInput.value = "";
       }
     </script>
   </body>

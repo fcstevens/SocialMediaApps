@@ -1,3 +1,4 @@
+/* Global styles */
 html,
 body {
   background-color: #c2c3f5;
@@ -13,26 +14,25 @@ body {
   min-height: 100vh;
 }
 
-body h1 {
+h1 {
   color: #fff8e8;
   font-size: 36px;
   text-align: center;
-  /* center the text horizontally */
 }
 
 h2 {
-  color: #FEF2A6;
+  color: #fef2a6;
   font-size: 32px;
   text-align: center;
-  /* center the text horizontally */
 }
 
 h3 {
-  color: #4056A1;
+  color: #4056a1;
   font-size: 22px;
   text-align: center;
 }
 
+/* Header and footer styles */
 header {
   background-color: #fff8e8;
 }
@@ -49,17 +49,18 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
 footer p {
   text-decoration: none;
   margin-right: 35px;
-  color: #4056A1;
+  color: #4056a1;
   font-weight: bold;
 }
 
-.logo {
+/* Logo styles */
+.logo,
+.logo-small {
   width: 600px;
   height: 50%;
   display: block;
@@ -71,18 +72,12 @@ footer p {
 .logo-small {
   width: 375px;
   height: 25%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #c2c3f5;
 }
 
-
-
-/*navigation css section*/
+/* Navigation styles */
 nav {
   height: 20%;
-  background-color: #4056A1;
+  background-color: #4056a1;
   display: flex;
   justify-content: space-between;
   padding: 30px;
@@ -112,7 +107,7 @@ nav a:hover {
 }
 
 .picPet {
-  color: #FEF2A6;
+  color: #fef2a6;
 }
 
 .picPetProfile {
@@ -120,27 +115,23 @@ nav a:hover {
 }
 
 .picPetMessage {
-  color: #FEF2A6;
+  color: #fef2a6;
 }
 
-/* form container css*/
+/* Form container styles */
 .form-box,
 .message-form {
   max-width: 40%;
   margin: 0 auto;
-  /* center the form container horizontally */
   padding: 20px;
-  border: 6px solid #4056A1;
-  /* add a border to the form container */
+  border: 6px solid #4056a1;
   border-radius: 5px;
   display: flex;
-  /* use flexbox for layout */
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #fff8e8;
 }
-
 
 .form-field {
   margin-bottom: 10px;
@@ -149,14 +140,13 @@ nav a:hover {
 .form-field label {
   display: block;
   font-weight: bold;
-  color: #4056A1;
+  color: #4056a1;
   margin-bottom: 5px;
 }
 
 .form-field input {
   width: 100%;
   padding: 10px;
-  padding-top: 10px;
   border: 3px solid #baaaf7;
   border-radius: 5px;
 }
@@ -164,7 +154,7 @@ nav a:hover {
 .submitButton {
   background-color: #baaaf7;
   color: #fff;
-  border: #efe2ba;
+  border: none;
   border-radius: 4px;
   padding: 10px 20px;
   font-size: 16px;
@@ -172,10 +162,10 @@ nav a:hover {
 }
 
 .submitButton:hover {
-  background-color: #F13C20;
+  background-color: #f13c20;
 }
 
-
+/* Button styles */
 button {
   background-color: #f9d476;
   border: none;
@@ -188,7 +178,7 @@ button {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  font-weight: bold
+  font-weight: bold;
 }
 
 button:hover {
@@ -205,15 +195,15 @@ input[type="submit"] {
   padding: 10px 20px;
   font-size: 16px;
   border: none;
-
 }
 
 .newPostButton:hover,
 input:hover[type="submit"] {
-  background-color: #F13C20;
+  background-color: #f13c20;
   cursor: pointer;
 }
 
+/* Comment styles */
 #message {
   width: 100%;
   padding: 5px;
@@ -221,37 +211,32 @@ input:hover[type="submit"] {
   border: 3px solid #baaaf7;
   border-radius: 5px;
   font-size: 22px;
-  color: #4056A1;
-  font-size: 22px;
+  color: #4056a1;
   text-align: center;
 }
 
-/* Style the comments container */
 #comments {
-
   margin-top: 5px;
-  border: 3px #e1bc5e;
+  border: 3px solid #e1bc5e;
   border-radius: 5px;
-  padding: 10px
+  padding: 10px;
 }
 
 #comment-form {
   padding-bottom: 20px;
 }
 
-/* Style the comments list */
 #post-comments {
   list-style-type: none;
   padding: 0;
 }
 
-/* Style the individual comment items */
 #post-comments li,
 label {
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 10px;
-  color: #4056A1;
+  color: #4056a1;
   font-size: 18px;
   text-align: center;
   font-weight: bold;
@@ -264,13 +249,14 @@ label {
   font-weight: bold;
 }
 
+/* Miscellaneous styles */
 .centre {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   height: 5vh;
 }
-
 
 .text-container {
   display: flex;
@@ -285,9 +271,7 @@ label {
   color: #fff8e8;
   font-size: 26px;
   margin-left: 100px;
-  /* Adjust the margin as needed for the left blank space */
   margin-right: 100px;
-  /* Adjust the margin as needed for the right blank space */
 }
 
 #recent-posts {
@@ -302,7 +286,7 @@ label {
 
 #recentPostsListContainer {
   background-color: #fff8e8;
-  border: 6px solid #4056A1;
+  border: 6px solid #4056a1;
   max-width: 70%;
   margin: 0 auto;
   padding-bottom: 40px;
@@ -313,14 +297,11 @@ label {
   justify-content: center;
   align-items: center;
   text-align: center;
-
 }
 
-
-/*profile section*/
-
+/* Profile section styles */
 .profile {
-  border: 6px solid #4056A1;
+  border: 6px solid #4056a1;
   background-color: #fff8e8;
   width: 70%;
   justify-content: center;
@@ -342,7 +323,6 @@ label {
   text-align: center;
   margin-top: 20px;
 }
-
 
 .profile-name {
   font-size: 24px;

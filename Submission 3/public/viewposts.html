@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
+    <!-- Link to custom CSS file -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
       rel="stylesheet"
     />
+    <!-- Link to Google Fonts -->
     <title>Pic-A-Pet</title>
     <style>
       img.post-image-thumbnail {
@@ -23,7 +25,7 @@
   <body>
     <nav>
       <a href="app">
-        <img class="logo-nav" src="images/logo-navbar.png" />
+        <img class="logo-nav" src="images/logo-navbar.png" alt="Logo" />
       </a>
       <a href="login.html">Login</a>
       <a href="logout.html">Logout</a>
@@ -50,42 +52,37 @@
       </h3>
     </div>
     <h2>Recent Posts</h2>
-
     <div class="centre">
       <button class="newPostButton" onclick="newPostPage()">Post</button>
     </div>
     <br />
     <div id="recentPostsListContainer">
-      <div>
-        <ul id="recent-posts"></ul>
-      </div>
+      <ul id="recent-posts"></ul>
     </div>
 
     <script>
       let recentPosts = [];
-
       let recentPostsList = document.querySelector("#recent-posts");
 
+      // Fetch recent posts from the server
       fetch("/getposts")
         .then((response) => response.json())
         .then((fetchedData) => {
           recentPosts = fetchedData.posts;
-          console.log(fetchedData.posts);
           handleServerData();
         });
 
       function handleServerData() {
         recentPostsList.innerHTML = "";
         recentPosts.forEach(function (post) {
-          // console.log(post._id.toString(), post.likes);
           let li = document.createElement("li");
           let liText = document.createElement("p");
           liText.textContent = `${post.message} (by ${post.postedBy}) [likes:${post.likes}]`;
-          //create a 'like' button
+
+          // Create a 'like' button
           let button = document.createElement("button");
-          button.textContent = "like";
+          button.textContent = "Like";
           button.addEventListener("click", processLike);
-          //add a unique attribute for the like button so it knows which post it belongs to
           button.setAttribute("data-post-id", post._id.toString());
 
           // Create a 'message' button and input field
@@ -106,23 +103,22 @@
             deletePost(post._id);
           });
 
-          //create a 'view and comment' button
+          // Create a 'view and comment' button
           let viewButton = document.createElement("button");
-          viewButton.textContent = "view and comment";
+          viewButton.textContent = "View and Comment";
           viewButton.addEventListener("click", processView);
-          //add a unique attribute for the like button so it knows which post it belongs to
           viewButton.setAttribute("view-post-id", post._id.toString());
 
-          // show image if present
+          // Show image if present
           if (post.imagePath) {
             let postImage = document.createElement("img");
             postImage.src = post.imagePath;
-            postImage.alt = "temporary alt tag";
+            postImage.alt = "Temporary alt tag";
             postImage.classList.add("post-image-thumbnail");
             li.appendChild(postImage);
           } else {
             let noPostImage = document.createElement("p");
-            noPostImage.textContent = "alas, no image!";
+            noPostImage.textContent = "Alas, no image!";
             li.appendChild(noPostImage);
           }
 
@@ -132,16 +128,15 @@
           li.appendChild(viewButton);
           li.appendChild(messageButton);
           li.appendChild(messageInput);
-          // grab the comments list
+
+          // Display comments if available
           let comments = post.comments;
           if (comments.length > 0) {
-            //add a list of comments
             let commentsUL = document.createElement("ul");
             comments.forEach(function (comment) {
               let commentLi = document.createElement("li");
               let commentLiText = document.createElement("p");
               commentLiText.textContent = `${comment.message} (by ${comment.user}) [likes:${comment.likes}]`;
-              //add like button and code to handle like later
               commentLi.appendChild(commentLiText);
               commentsUL.appendChild(commentLi);
             });
@@ -154,7 +149,6 @@
 
       function processLike(event) {
         let likedPostId = event.target.getAttribute("data-post-id");
-        // console.log('you liked '+likedPostId)
         let options = {
           method: "POST",
           headers: {
@@ -172,22 +166,16 @@
           });
       }
 
-      // If view post button is pressed, grab its post id attribute and
-      // direct the user to the view post page with this added in
-      // url search params
       function processView(event) {
         let viewPostId = event.target.getAttribute("view-post-id");
-        console.log(
-          window.location.origin + "/viewpost.html?post=" + viewPostId
-        );
-        window.location =
-          window.location.origin + "/viewpost.html?post=" + viewPostId;
+        let viewPostUrl = `${window.location.origin}/viewpost.html?post=${viewPostId}`;
+        console.log(viewPostUrl);
+        window.location = viewPostUrl;
       }
 
-      //if user press 'new post' button, direct them to the new post page
       function newPostPage() {
-        window.location = window.location =
-          window.location.origin + "/newpost.html";
+        let newPostUrl = `${window.location.origin}/newpost.html`;
+        window.location = newPostUrl;
       }
 
       function deletePost(postId) {

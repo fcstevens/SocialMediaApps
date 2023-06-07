@@ -1,15 +1,14 @@
-// Assuming you have access to the 'users.js' module and its functions
 
+// Function to handle changing the username
 function changeUsername() {
   // Get the new username from the input field
   const newUsername = document.getElementById('new-username').value;
 
-  // Get the currently logged-in user (you can modify this based on your authentication mechanism)
-  const currentUser = 'user1'; // Assuming you have the currently logged-in user
 
   // Update the username using the 'updateUsername' function from 'users.js'
-  users.updateUsername(currentUser, newUsername);
+  users.updateUsername(newUsername);
 
+  // Function to update the username in the database
   async function updateUsername(username, newUsername) {
     try {
       const user = findUser(username);
@@ -56,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Function to send a message
 function sendMessage(data) {
   fetch('/send-message', {
     method: 'POST',
@@ -66,11 +66,11 @@ function sendMessage(data) {
   })
     .then(response => response.json())
     .then(result => {
-      console.log('Message Sent')
+      console.log('Message Sent');
       // Handle the response (e.g., display success message, update UI, etc.)
     })
     .catch(error => {
       // Handle the error (e.g., display error message, log, etc.)
-      console.log('Message failed to send')
+      console.log('Message failed to send');
     });
 }

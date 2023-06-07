@@ -1,22 +1,27 @@
+// User Data
 const users = [
     { username: 'user1', password: '123', loggedin: false },
     { username: 'user2', password: '123', loggedin: false },
     { username: 'user3', password: '321', loggedin: false }
 ];
 
+// Add a new user to the users array.
 function newUser(username, password) {
     const user = { username: username, password: password, loggedin: false };
     users.push(user);
 }
 
+// Get the list of all users.
 function getUsers() {
     return users;
 }
 
+// Find a user by username.
 function findUser(username) {
     return users.find(user => user.username === username);
 }
 
+// Check if the provided password matches the user's password.
 function checkPassword(username, password) {
     let user = findUser(username);
     if (user) {
@@ -25,6 +30,7 @@ function checkPassword(username, password) {
     return false;
 }
 
+// Set the logged-in state of a user.
 function setLoggedIn(username, state) {
     let user = findUser(username);
     if (user) {
@@ -32,6 +38,7 @@ function setLoggedIn(username, state) {
     }
 }
 
+// Check if a user is logged in.
 function isLoggedIn(username) {
     let user = findUser(username);
     if (user) {
@@ -40,6 +47,7 @@ function isLoggedIn(username) {
     return false;
 }
 
+// Update the username of a user.
 async function updateUsername(username, newUsername) {
     try {
         const user = findUser(username);
@@ -58,6 +66,16 @@ async function updateUsername(username, newUsername) {
     }
 }
 
+// Change the password of a user.
+async function changePassword(username, newPassword) {
+    let user = await findUser(username);
+    if (user) {
+        user.password = newPassword;
+        user.save();
+    }
+}
+
+// Export functions
 exports.newUser = newUser;
 exports.getUsers = getUsers;
 exports.findUser = findUser;
@@ -65,3 +83,4 @@ exports.checkPassword = checkPassword;
 exports.setLoggedIn = setLoggedIn;
 exports.isLoggedIn = isLoggedIn;
 exports.updateUsername = updateUsername;
+exports.changePassword = changePassword;

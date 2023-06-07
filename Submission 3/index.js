@@ -6,9 +6,14 @@ const app = express();
 const ejs = require('ejs');
 const path = require('path');
 const User = require('./models/User');
-const Pet = require('./models/Pet');
+const users = require('./users');
+
+const postData = require('./models/Post');
+const { changePassword } = require('./models/User');
 
 
+const multer = require('multer');
+const upload = multer({ dest: './public/uploads/' });
 
 app.listen(3000, () => console.log('listening at port 3000'));
 
@@ -44,12 +49,6 @@ mongoose.connect(`mongodb+srv://CCO6005-01:black.D0g@cluster0.lpfnqqx.mongodb.ne
     useUnifiedTopology: true,
     useFindAndModify: false
 };
-
-// Load models and modules
-const users = require('./models/User');
-const postData = require('./models/Post');
-const multer = require('multer');
-const upload = multer({ dest: './public/uploads/' });
 
 // Middleware to check if a user is logged in
 function checkLoggedIn(request, response, nextAction) {
@@ -91,7 +90,6 @@ app.post('/login', async (request, response) => {
         response.redirect('/loginfailed.html');
     }
 });
-
 
 // New post controller
 app.post('/newpost', upload.single('myImage'), async (request, response) => {
@@ -205,7 +203,6 @@ app.get('/profile.html', (request, response) => {
     response.render('profile', { username: username });
 });
 
-
 // Delete post controller
 app.post("/deletepost/:postId", async (request, response) => {
     const postId = request.params.postId;
@@ -230,57 +227,14 @@ app.post("/deletepost/:postId", async (request, response) => {
     }
 });
 
-// Inside index.js
-app.post('/send-message', async (req, res) => {
+// Get messages controller
+app.get('/message', async (request, response) => {
     try {
-        const { petId, message } = req.body;
-        const sender = req.session.userid; // Assuming you have the user's session stored
-
-        // Find the recipient's user based on the petId
-        const pet = await Pet.findById(petId).populate('user');
-        const recipient = pet.user;
-
-        // Create the message object
-        const newMessage = {
-            sender: sender._id,
-            pet: pet._id,
-            action: '', // Add the desired action here ('Meet', 'Walk', 'Pet-sit', etc.)
-            message: message
-        };
-
-        // Add the message to the sender and recipient's user documents
-        sender.messages.push(newMessage);
-        recipient.messages.push(newMessage);
-
-        // Save the changes
-        await sender.save();
-        await recipient.save();
-
-        res.json({ success: true });
-    } catch (error) {
-        console.error('Error sending message:', error);
-        res.status(500).json({ success: false, error: 'Failed to send message' });
-    }
-});
-
-app.get('/profile', async (req, res) => {
-    try {
-        const user = await User.findById(req.session.userid).populate('messages.pet');
-        res.render('profile', { user });
-    } catch (error) {
-        console.error('Error retrieving user profile:', error);
-        res.status(500).send('Failed to retrieve user profile');
-    }
-});
-
-// Inside index.js
-app.get('/get-messages', async (req, res) => {
-    try {
-        const user = await User.findById(req.session.user._id).populate('messages.sender messages.pet');
-        const messages = user.messages;
-        res.json({ messages });
+        const messages = await postData.getMessages();
+        response.render('message', { messages });
     } catch (error) {
         console.error('Error retrieving messages:', error);
-        res.status(500).json({ error: 'Failed to retrieve messages' });
+        response.status(500).send('Internal Server Error');
     }
 });
+

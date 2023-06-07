@@ -5,35 +5,42 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
+    <!-- Link to custom CSS file -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
       rel="stylesheet"
     />
+    <!-- Link to Google Fonts -->
     <title>Pic-A-Pet</title>
   </head>
   <body>
     <nav>
       <a href="login.html">Login</a>
+      <!-- Login link -->
       <a href="register.html">Register</a>
+      <!-- Register link -->
     </nav>
     <br />
-    <img class="logo" src="images/Pic-A-Pet Logo.PNG.png" />
+    <img class="logo" src="images/Pic-A-Pet Logo.PNG.png" alt="Logo" />
+    <!-- Logo image -->
     <h2>Place for Pets, Pups and Pics!</h2>
+    <!-- Heading -->
     <br />
     <form class="form-box" action="/login" method="POST">
-      <label class="form-field label">Username</label>
+      <!-- Login form -->
+      <label class="form-field label" for="username">Username</label>
       <input
         class="form-field input"
         type="text"
         id="username"
         name="username"
       /><br />
-      <label class="form-field label">Password</label>
+      <label class="form-field label" for="password">Password</label>
       <input
         class="form-field input"
-        type="text"
+        type="password"
         id="password"
         name="password"
       /><br />
@@ -48,6 +55,5 @@
       <br />
       <p>Email: Happytohelpapet@gmail.com</p>
     </footer>
-    <script></script>
   </body>
 </html>

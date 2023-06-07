@@ -5,52 +5,83 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
+    <!-- Link to custom CSS file -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
       rel="stylesheet"
     />
+    <!-- Link to Google Fonts -->
     <title>Pic-A-Pet</title>
   </head>
   <body>
     <nav>
       <a href="app">
-        <img class="logo-nav" src="images/logo-navbar.png" />
+        <img class="logo-nav" src="images/logo-navbar.png" alt="Logo" />
+        <!-- Logo image -->
       </a>
       <a href="login.html">Login</a>
+      <!-- Login link -->
       <a href="logout.html">Logout</a>
+      <!-- Logout link -->
       <a href="register.html">Register</a>
+      <!-- Register link -->
       <a class="picPet" href="app">Feed</a>
+      <!-- Feed link -->
       <a class="picPetMessage" href="message.html">Messages</a>
+      <!-- Messages link -->
       <a class="picPetProfile" href="profile.html">Profile</a>
+      <!-- Profile link -->
     </nav>
     <br />
-    <img class="logo-small" src="images/Pic-A-Pet Logo.PNG.png" />
-
+    <img class="logo-small" src="images/Pic-A-Pet Logo.PNG.png" alt="Logo" />
+    <!-- Logo image -->
     <h2>
       Welcome to Pic-a-Pet, a social media platform for all animal related
       content!
     </h2>
+    <!-- Heading -->
     <br />
     <div class="messages-section">
       <h2>Messages</h2>
+      <!-- Heading -->
       <ul id="messages-list"></ul>
+      <!-- List for displaying messages -->
     </div>
 
-    <h3>Here you can message other users!</h3>
-    <br />
-    <br />
-    <div class="message-form">
-      <% user.messages.forEach(message => { %>
-      <div class="message">
-        <p>From: <%= message.sender.username %></p>
-        <p>Pet: <%= message.pet.name %></p>
-        <p>Action: <%= message.action %></p>
-        <p>Message: <%= message.message %></p>
-      </div>
-      <% }); %>
-    </div>
+    <h1>Received Messages</h1>
+    <!-- Heading -->
+    <div id="message-container"></div>
+    <!-- Container for received messages -->
+
+    <script>
+      const messageContainer = document.querySelector("#message-container");
+
+      // Fetch the received messages from the server
+      fetch("/getmessages")
+        .then((response) => response.json())
+        .then((serverResponse) => renderMessages(serverResponse.messages))
+        .catch((error) => {
+          console.log(error);
+          // Handle error
+        });
+
+      // Render the received messages
+      function renderMessages(messages) {
+        if (messages.length === 0) {
+          // No messages
+          messageContainer.innerText = "No Messages";
+        } else {
+          // Display the messages
+          messages.forEach((message) => {
+            const messageDiv = document.createElement("div");
+            messageDiv.textContent = message;
+            messageContainer.appendChild(messageDiv);
+          });
+        }
+      }
+    </script>
     <footer>
       <p>Tel: +44 131 496 0418</p>
       <br />
